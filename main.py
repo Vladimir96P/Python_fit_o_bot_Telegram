@@ -2,7 +2,10 @@ import telebot
 from telebot import types
 import statistics
 import sqlite3
+import os
+from flask import Flask
 bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
+server = Flask(__name__)
 user_dict = {}
 class User:
     def __init__(self, name):
@@ -183,4 +186,5 @@ def callback_worker(call):
 @bot.message_handler(content_types=['text'])
 def handle_docs_audio(message):
     send_keyboard(message, text="Я не понимаю :-( Выбери один из пунктов меню:")
-bot.infinity_polling()
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
