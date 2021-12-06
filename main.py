@@ -3,7 +3,8 @@ from telebot import types
 import statistics
 import sqlite3
 import os
-from flask import Flask
+from flask import Flask, request
+import logging
 TOKEN = "5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg"
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
@@ -189,18 +190,20 @@ def handle_docs_audio(message):
     send_keyboard(message, text="Я не понимаю :-( Выбери один из пунктов меню:")
 
 
-@server.route('/' + TOKEN, methods=['POST'])
-def getMessage():
-    json_string = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_string)
-    bot.process_new_updates([update])
-    return "!", 200
-
-@server.route("/")
-def webhook():
+if "HEROKU" in list(os.environ.keys()):
+    logger = telebot.logger
+    telebot.logger.setLevel(logging.INFO)
+    server = Flask(__name__)
+    @server.route("/bot", methods=['POST'])
+    def getMessage():
+        bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+        return "!", 200
+    @server.route("/")
+    def webhook():
+        bot.remove_webhook()
+        bot.set_webhook(url="https://git.heroku.com/fit-o-bot.git")
+        return "?", 200
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
+else:
     bot.remove_webhook()
-    bot.set_webhook(url='https://git.heroku.com/fit-o-bot.git' + TOKEN)
-    return "!", 200
-
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+    bot.polling(none_stop=True)
