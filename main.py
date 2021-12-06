@@ -2,12 +2,7 @@ import telebot
 from telebot import types
 import statistics
 import sqlite3
-import os
-from flask import Flask, request
-import logging
-TOKEN = "5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg"
-bot = telebot.TeleBot(TOKEN)
-server = Flask(__name__)
+bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
 user_dict = {}
 class User:
     def __init__(self, name):
@@ -148,9 +143,9 @@ def delete_all(msg):
 def callback_worker(call):
     if call.text == "Хочу сообщить свой текущий вес 😱":
         msg = bot.send_message(call.chat.id, '''
-        Не бойся, отправляй свой текущий вес, на своем веку я видал многое..
-        \nПрисылай в формате текущей даты и веса разделенных пробелом, мне нужно записать это в свой журнал:)
-        \nНапример: 05.12.2021 87.77 (где первая часть - дата, а вторая - вес).''')
+            Не бойся, отправляй свой текущий вес, на своем веку я видал многое..
+        Присылай в формате текущей даты и веса разделенных пробелом, мне нужно записать это в свой журнал:)
+        Например: 05.12.2021 87.77 (где первая часть - дата, а вторая - вес).''')
         bot.register_next_step_handler(msg, add_weight)
 
     elif call.text == "Хочу поднабрать массы 💪":
@@ -188,22 +183,4 @@ def callback_worker(call):
 @bot.message_handler(content_types=['text'])
 def handle_docs_audio(message):
     send_keyboard(message, text="Я не понимаю :-( Выбери один из пунктов меню:")
-
-
-if "HEROKU" in list(os.environ.keys()):
-    logger = telebot.logger
-    telebot.logger.setLevel(logging.INFO)
-    server = Flask(__name__)
-    @server.route("/bot", methods=['POST'])
-    def getMessage():
-        bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-        return "!", 200
-    @server.route("/")
-    def webhook():
-        bot.remove_webhook()
-        bot.set_webhook(url="https://git.heroku.com/fit-o-bot.git")
-        return "?", 200
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
-else:
-    bot.remove_webhook()
-    bot.polling(none_stop=True)
+bot.infinity_polling()
