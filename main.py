@@ -186,5 +186,12 @@ def callback_worker(call):
 @bot.message_handler(content_types=['text'])
 def handle_docs_audio(message):
     send_keyboard(message, text="Я не понимаю :-( Выбери один из пунктов меню:")
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://git.heroku.com/fit-o-bot.git' + "5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
+    return "!", 200
+
 if __name__ == "__main__":
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
