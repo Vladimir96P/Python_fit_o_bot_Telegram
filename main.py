@@ -51,7 +51,7 @@ def add_weight(msg):
             cursor.execute('INSERT INTO users_weights_table (user_id, date, weight) VALUES (?, ?, ?)',
                            (msg.from_user.id, current_date, current_weight))
             con.commit()
-        bot.send_message(msg.chat.id, 'Как когда-то сказал Аристотель: \"Познание всегда начинается с удивления\"..')
+        bot.send_message(msg.chat.id, 'Зафиксировал!😨 Как когда-то сказал Аристотель: \"Познание всегда начинается с удивления\"..')
         send_keyboard(msg)
     except:
         bot.send_message(msg.chat.id, 'Введен некорректный формат :(')
