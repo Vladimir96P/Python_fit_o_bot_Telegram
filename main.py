@@ -141,7 +141,7 @@ def delete_last(msg):
 def delete_all(msg):
     with sqlite3.connect('fit_o_bot.db') as con:
         cursor = con.cursor()
-        cursor.executemany(f'DELETE FROM users_weights_table WHERE user_id=={msg.from_user.id}, {tuple(msg.from_user.id)}')
+        cursor.execute(f'DELETE FROM users_weights_table WHERE user_id=={msg.from_user.id}')
         con.commit()
         cursor.close()
         bot.send_message(msg.chat.id, 'И начнем все с чистого листа! 🥂')
