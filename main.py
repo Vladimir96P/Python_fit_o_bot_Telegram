@@ -44,7 +44,7 @@ def user_name(msg):
                 cursor.execute(query)
                 conn.close()
             except:
-                pass
+                bot.reply_to(message, 'Что-то пошло по *****')
             conn = sqlite3.connect('fit_o_bot.db')
             cursor = conn.cursor()
             with sqlite3.connect('fit_o_bot.db') as con:
