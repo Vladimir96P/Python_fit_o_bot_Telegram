@@ -15,7 +15,7 @@ try:
     \"name\" TEXT,
     \"age\" INTEGER,
     \"height\" REAL,
-    \"sex\" TEXT
+    \"sex\" TEXT,
     PRIMARY KEY (\"ID\")
     )'''
     cursor.execute(query0)
@@ -37,16 +37,19 @@ def send_keyboard(message, text = "Выбери интересующий раз�
     keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5)
     msg = bot.send_message(message.from_user.id, text=text, reply_markup=keyboard)
     bot.register_next_step_handler(msg, callback_worker)
-conn = sqlite3.connect('fit_o_bot.db')
-cursor = conn.cursor()
 def user_name(msg):
+    print(msg)
     try:
+        print(msg.text)
         name = msg.text.split()[0].title()
+        print(name)
         age = msg.text.split()[1]
         age = int(age)
+        print(age)
         height = msg.text.split()[2]
         height = float(height)
         sex = msg.text.split()[3].title()
+        print(name, age, height, sex)
         if sex == 'М' or sex == 'Ж':
             with sqlite3.connect('fit_o_bot.db') as con:
                 con.isolation_level = None
@@ -59,9 +62,9 @@ def user_name(msg):
             send_keyboard(msg)
             bot.register_next_step_handler(msg, callback_worker)
         else:
-            bot.reply_to(message, 'Кажется, неправильно введен пол')
+            bot.reply_to(msg, 'Кажется, неправильно введен пол')
     except Exception as e:
-        bot.reply_to(message, 'Что-то не так.. проверь корректность ввода и давай попробуем еще раз 🙏')
+        bot.reply_to(msg, 'Что-то не так.. проверь корректность ввода и давай попробуем еще раз 🙏')
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
 try:
