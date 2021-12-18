@@ -6,6 +6,21 @@ import os
 import time
 from datetime import datetime
 bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
+conn = sqlite3.connect('fit_o_bot.db')
+cursor = conn.cursor()
+try:
+    query0 = '''CREATE TABLE IF NOT EXISTS bot_users_list (
+    ID INTEGER UNIQUE PRIMARY KEY, 
+    user_id INTEGER, 
+    name TEXT,
+    age INTEGER,
+    height REAL,
+    sex TEXT
+    )'''
+    cursor.execute(query0)
+    conn.close()
+except:
+    pass
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     msg = bot.reply_to(message, "Хэй! Меня зовут Фитобот😊 А тебя как? Напиши, пожалуйста, свое имя, возраст, рост в метрах и пол (русскоязычной раскладкой) на моем примере: Фитобот 25 1.75 М")
@@ -21,6 +36,8 @@ def send_keyboard(message, text = "Выбери интересующий раз�
     keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5)
     msg = bot.send_message(message.from_user.id, text=text, reply_markup=keyboard)
     bot.register_next_step_handler(msg, callback_worker)
+conn = sqlite3.connect('fit_o_bot.db')
+cursor = conn.cursor()
 def user_name(msg):
     try:
         name = msg.text.split()[0].title()
@@ -29,25 +46,7 @@ def user_name(msg):
         height = msg.text.split()[2]
         height = float(height)
         sex = msg.text.split()[3].title()
-        print(sex)
         if sex == 'М' or sex == 'Ж':
-            conn = sqlite3.connect('fit_o_bot.db')
-            cursor = conn.cursor()
-            try:
-                query = '''CREATE TABLE IF NOT EXISTS bot_users_list (
-                ID INTEGER UNIQUE PRIMARY KEY, 
-                user_id INTEGER, 
-                name TEXT,
-                age INTEGER,
-                height REAL,
-                sex TEXT
-                )'''
-                cursor.execute(query)
-                conn.close()
-            except:
-                print('fck')
-            conn = sqlite3.connect('fit_o_bot.db')
-            cursor = conn.cursor()
             with sqlite3.connect('fit_o_bot.db') as con:
                 con.isolation_level = None
                 cursor = con.cursor()
@@ -426,7 +425,7 @@ def callback_worker(call):
         msg = bot.send_message(call.chat.id, f'''
         \nНе бойся, отправляй свой текущий вес, на своем веку я видал многое..
         \nПрисылай в формате текущей даты и веса разделенных пробелом, мне нужно записать это в свой журнал:)
-        \nНужен следующий формат: dd-mm-yyyy 85.4 (где первая часть - дата (например: 16-04-1996, а вторая - вес).''')
+        \nНужен следующий формат: dd-mm-yyyy 85.4 где первая часть - дата (например: 16-04-1996), а вторая - вес.''')
         bot.register_next_step_handler(msg, add_weight)
 
     elif call.text == "Хочу поднабрать массы 💪":
