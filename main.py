@@ -9,13 +9,14 @@ bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
 try:
-    query0 = '''CREATE TABLE IF NOT EXISTS bot_users_list (
-    ID INTEGER UNIQUE PRIMARY KEY, 
-    user_id INTEGER, 
-    name TEXT,
-    age INTEGER,
-    height REAL,
-    sex TEXT
+    query0 = '''CREATE TABLE IF NOT EXISTS \"bot_users_list\" (
+    \"ID\" INT UNIQUE, 
+    \"user\"_id INT, 
+    \"name\" TEXT,
+    \"age\" INT,
+    \"height\" REAL,
+    \"sex\" TEXT
+    PRIMARY KEY (\"ID\")
     )'''
     cursor.execute(query0)
     conn.close()
@@ -64,11 +65,12 @@ def user_name(msg):
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
 try:
-    query = '''CREATE TABLE IF NOT EXISTS bot_users_weights_table (
-    ID INTEGER UNIQUE PRIMARY KEY, 
-    user_id INTEGER, 
-    date TEXT, 
-    weight REAL
+    query = '''CREATE TABLE IF NOT EXISTS \"bot_users_weights_table\" (
+    \"ID\" INT UNIQUE, 
+    \"user_id\" INT, 
+    \"date\" TEXT, 
+    \"weight\" REAL,
+    PRIMARY KEY (\"ID\")
     )'''
     cursor.execute(query)
     conn.close()
