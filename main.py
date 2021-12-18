@@ -29,6 +29,7 @@ def user_name(msg):
         height = msg.text.split()[2]
         height = float(height)
         sex = msg.text.split()[3].title()
+        print(sex)
         if sex == 'М' or sex == 'Ж':
             conn = sqlite3.connect('fit_o_bot.db')
             cursor = conn.cursor()
@@ -44,7 +45,7 @@ def user_name(msg):
                 cursor.execute(query)
                 conn.close()
             except:
-                bot.reply_to(message, 'Что-то пошло по *****')
+                print('fck')
             conn = sqlite3.connect('fit_o_bot.db')
             cursor = conn.cursor()
             with sqlite3.connect('fit_o_bot.db') as con:
