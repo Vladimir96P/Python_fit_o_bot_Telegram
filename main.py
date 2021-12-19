@@ -4,7 +4,7 @@ import statistics
 import sqlite3
 import os
 import time
-from datetime import datetime
+import datetime as dt
 bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
