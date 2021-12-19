@@ -50,7 +50,7 @@ def send_keyboard(message, text = "Выбери интересующий раз�
     itembtn2 = types.KeyboardButton('Хочу согнать жирок 🥦')
     itembtn3 = types.KeyboardButton('Хочу поднабрать массы 💪')
     itembtn4 = types.KeyboardButton('Удалить последнюю запись веса')
-    itembtn5 = types.KeyboardButton("Удалить все записи")
+    itembtn5 = types.KeyboardButton("Удалить все записи веса")
     itembtn6 = types.KeyboardButton("Очистить данные из базы (имя, возраст, пол, рост)")
     keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn6)
     msg = bot.send_message(message.from_user.id,text=text, reply_markup=keyboard)
