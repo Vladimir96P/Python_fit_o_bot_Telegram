@@ -5,7 +5,7 @@ import sqlite3
 import os
 import time
 import datetime as dt
-# import psycopg2
+import psycopg2
 bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
@@ -35,9 +35,7 @@ try:
     conn.close()
 except:
     pass
-# DB_URI = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
-# db_con = psycopg2.connect(DB_URI, sslmode = "require")
-# db_obj = db_con.cursor()
+DB_URI = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
 
 @bot.message_handler(commands=['start'])
 
@@ -75,8 +73,11 @@ def user_name(msg):
                        VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
                 con.commit()
                 cursor.close()
-            # db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
-            # db_con.commit()
+                with psycopg2.connect(DB_URI, sslmode="require") as db_con:
+                    db_obj = db_con.cursor()
+                    db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (msg.from_user.id, name, age, height, sex))
+                    db_con.commit()
+                    db_obj.close()
             message = bot.send_message(msg.from_user.id, f'''Привет! Приятно познакомиться, {name} 😜. Выбирай интересующую тебя тему:) И при первом использовании не забудь ввести свой текущий вес!)''')
             send_keyboard(msg)
     except Exception as e:
