@@ -35,7 +35,7 @@ try:
     conn.close()
 except:
     pass
-DB_URI = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
+DB_URL = os.environ["postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"]
 
 @bot.message_handler(commands=['start'])
 
@@ -73,7 +73,7 @@ def user_name(msg):
                        VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
                 con.commit()
                 cursor.close()
-                with psycopg2.connect(DB_URI, sslmode="require") as db_con:
+                with psycopg2.connect(DB_URL, sslmode="require") as db_con:
                     db_obj = db_con.cursor()
                     db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (msg.from_user.id, name, age, height, sex))
                     db_con.commit()
