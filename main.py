@@ -1,12 +1,10 @@
 import telebot
 from telebot import types
-import statistics
 import sqlite3
-import os
-import time
 import datetime as dt
 # import psycopg2
 bot = telebot.TeleBot("5058162485:AAGSB2FehnhupFU5ViiEwRgypDMJmddcpmg")
+bot.delete_webhook()
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
 try:
@@ -504,6 +502,6 @@ def delete_user_info(msg):
 @bot.message_handler(content_types=['text'])
 
 def sorry(message):
-    send_keyboard(message, text="Я не понимаю 🌚 Выбери один из пунктов меню:")
+    send_keyboard(message, text="Я не понимаю!🌚 Выбери один из пунктов меню:")
 
 bot.infinity_polling()
