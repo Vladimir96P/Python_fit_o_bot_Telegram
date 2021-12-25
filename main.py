@@ -116,18 +116,28 @@ def increase_weight(msg):
             ''')
             send_keyboard(msg)
         elif msg.text == "Средняя активность 🏄‍♀️🏄‍♂️":
-            with sqlite3.connect('fit_o_bot.db') as con:
-                con.isolation_level = None
-                cursor = con.cursor()
-                cursor.execute(f'SELECT weight FROM bot_users_weights_table WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                last_weight = float(pretiffy(cursor.fetchall()))
-                print(last_weight)
-                cursor.execute(f'SELECT sex FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                sex = pretiffy(cursor.fetchall())
-                cursor.execute(f'SELECT age FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                age = int(pretiffy(cursor.fetchall()))
-                cursor.execute(f'SELECT height FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                height = float(pretiffy(cursor.fetchall()))
+            # with sqlite3.connect('fit_o_bot.db') as con:
+            #     con.isolation_level = None
+            #     cursor = con.cursor()
+            #     cursor.execute(f'SELECT weight FROM bot_users_weights_table WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+            #     last_weight = float(pretiffy(cursor.fetchall()))
+            #     print(last_weight)
+            #     cursor.execute(f'SELECT sex FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+            #     sex = pretiffy(cursor.fetchall())
+            #     cursor.execute(f'SELECT age FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+            #     age = int(pretiffy(cursor.fetchall()))
+            #     cursor.execute(f'SELECT height FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+            #     height = float(pretiffy(cursor.fetchall()))
+            with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
+                db_obj = postgre_con.cursor()
+                db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                last_weight = float(pretiffy(db_obj.fetchall()))
+                db_obj.execute(f'SELECT age FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                age = int(pretiffy(db_obj.fetchall()))
+                db_obj.execute(f'SELECT height FROM bot_users_list WHERE user_id=={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                height = float(pretiffy(db_obj.fetchall()))
+                postgre_con.commit()
+                db_obj.close()
                 if sex == 'М':
                     target_calories = round(1.2 * (13.397 * last_weight + 88.362 + 4.799 * height * 100 - 5.677 * age))
                     water_quantity = round(((target_calories/ 1000) * 1),2)
@@ -147,7 +157,6 @@ def increase_weight(msg):
                     \nПо достижении целевого веса, можешь обновить данные и я произведу перерасчет под новую цель.
                     \nУдачи! Все получится ☺️
                     ''')
-                    cursor.close()
                     send_keyboard(msg)
                 elif sex == 'Ж':
                     target_calories = round(1.2 * (9.247 * last_weight + 447.593 + 3.098 * height * 100 - 4.33 * age))
@@ -168,7 +177,6 @@ def increase_weight(msg):
                     \nПо достижении целевого веса, можешь обновить данные и я произведу перерасчет под новую цель.
                     \nУдачи! Все получится ☺️
                     ''')
-                    cursor.close()
                     send_keyboard(msg)
         elif msg.text == "Высокая активность 🏋️ 🔥 🏋️":
             with sqlite3.connect('fit_o_bot.db') as con:
@@ -449,15 +457,23 @@ def add_weight(msg):
         float(current_weight)
         current_weight = float(current_weight)
         dt_obj = dt.datetime.strptime(f"{current_date}", "%d-%m-%Y").date()
-        with sqlite3.connect('fit_o_bot.db') as con:
-            con.isolation_level = None
-            cursor = con.cursor()
-            cursor.execute('''
-            INSERT INTO bot_users_weights_table (user_id, date, weight)
-            VALUES (?, ?, ?);''', (msg.from_user.id, current_date, current_weight))
-            cursor.close()
+        # with sqlite3.connect('fit_o_bot.db') as con:
+        #     con.isolation_level = None
+        #     cursor = con.cursor()
+        #     cursor.execute('''
+        #     INSERT INTO bot_users_weights_table (user_id, date, weight)
+        #     VALUES (?, ?, ?);''', (msg.from_user.id, current_date, current_weight))
+        #     cursor.close()
+        with psycopg2.connect(db_URL, sslmode = "require") as postgre_con:
+            db_obj = postgre_con.cursor()
+            db_obj.execute(
+                '''INSERT INTO bot_users_weights_table (user_id, date, weight) 
+                VALUES (%s, %s, %s);''', (msg.from_user.id, current_date, current_weight))
+            postgre_con.commit()
+            db_obj.close()
             bot.send_message(msg.chat.id, 'Зафиксировал!😨 Как когда-то сказал Аристотель: \"Познание всегда начинается с удивления\"..')
             send_keyboard(msg)
+
     except:
         bot.send_message(msg.chat.id, 'Введен некорректный формат 😟. Попробуй еще раз 😉')
         send_keyboard(msg)
