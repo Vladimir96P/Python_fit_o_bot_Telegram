@@ -34,7 +34,8 @@ try:
     conn.close()
 except:
     pass
-db_con = psycopg2.connect(URI, sslmode = "require")
+db_URL = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
+db_con = psycopg2.connect(db_URL, sslmode = "require")
 db_obj = db_con.cursor()
 db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (12345, 'Alex', 32, 1.65, 'М'))
 print('OK')
