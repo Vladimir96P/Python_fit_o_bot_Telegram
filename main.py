@@ -5,8 +5,8 @@ import sqlite3
 import os
 import time
 import datetime as dt
-import psycopg2
-bot = telebot.TeleBot("5058162485:AAHGx9-XieFGAaHLb3cVumTcokI1RkwGJbg")
+# import psycopg2
+bot = telebot.TeleBot("5058162485:AAGSB2FehnhupFU5ViiEwRgypDMJmddcpmg")
 conn = sqlite3.connect('fit_o_bot.db')
 cursor = conn.cursor()
 try:
@@ -35,8 +35,10 @@ try:
     conn.close()
 except:
     pass
-DB_URL = os.environ["postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"]
-db_con = psycopg2.connect(DB_URL, sslmode='require')
+# DB_URI = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
+# db_con = psycopg2.connect(DB_URI, sslmode = "require")
+# db_obj = db_con.cursor()
+
 @bot.message_handler(commands=['start'])
 
 def send_welcome(message):
@@ -54,7 +56,7 @@ def send_keyboard(message, text = "Выбери интересующий раз�
     itembtn6 = types.KeyboardButton("Очистить данные из базы (имя, возраст, пол, рост)")
     keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn6)
     msg = bot.send_message(message.from_user.id,text=text, reply_markup=keyboard)
-    bot.register_next_step_handler(msg, callback_worker)
+    # bot.register_next_step_handler(msg, callback_worker)
 
 def user_name(msg):
     print(msg)
@@ -73,9 +75,8 @@ def user_name(msg):
                        VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
                 con.commit()
                 cursor.close()
-                db_obj = db_con.cursor()
-                db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (msg.from_user.id, name, age, height, sex))
-                db_con.commit()
+            # db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
+            # db_con.commit()
             message = bot.send_message(msg.from_user.id, f'''Привет! Приятно познакомиться, {name} 😜. Выбирай интересующую тебя тему:) И при первом использовании не забудь ввести свой текущий вес!)''')
             send_keyboard(msg)
     except Exception as e:
