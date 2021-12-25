@@ -54,7 +54,7 @@ def send_keyboard(message, text = "Выбери интересующий раз�
     itembtn6 = types.KeyboardButton("Очистить данные из базы (имя, возраст, пол, рост)")
     keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn6)
     msg = bot.send_message(message.from_user.id,text=text, reply_markup=keyboard)
-    # bot.register_next_step_handler(msg, callback_worker)
+    bot.register_next_step_handler(msg, callback_worker)
 
 def user_name(msg):
     print(msg)
