@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import sqlite3
 import datetime as dt
-from psycopg2-binary import psycopg2
+import psycopg2
 bot = telebot.TeleBot("5058162485:AAGSB2FehnhupFU5ViiEwRgypDMJmddcpmg")
 bot.delete_webhook()
 conn = sqlite3.connect('fit_o_bot.db')
