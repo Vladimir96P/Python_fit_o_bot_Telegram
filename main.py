@@ -133,7 +133,7 @@ def increase_weight(msg):
             db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
             last_weight = float(pretiffy(db_obj.fetchall()))
             db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            sex = pretiffy(cursor.fetchall())
+            sex = pretiffy(db_obj.fetchall())
             db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
             age = int(pretiffy(db_obj.fetchall()))
             db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
