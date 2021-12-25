@@ -36,9 +36,9 @@ except:
     pass
 db_URL = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
 db_con = psycopg2.connect(db_URL, sslmode = "require")
-db_obj = db_con.cursor()
-db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (12345, 'Alex', 32, 1.65, 'М'))
-# print('OK')
+# db_obj = db_con.cursor()
+# db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (12345, 'Alex', 32, 1.65, 'М'))
+# # print('OK')
 @bot.message_handler(commands=['start'])
 
 def send_welcome(message):
@@ -75,8 +75,13 @@ def user_name(msg):
                        VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
                 con.commit()
                 cursor.close()
-            # db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (?, ?, ?, ?, ?);''', (msg.from_user.id, name, age, height, sex))
-            # db_con.commit()
+            with psycopg2.connect(db_URL, sslmode = "require") as postgre_con:
+                db_obj = postgre_con.cursor()
+                db_obj.execute(
+                    '''INSERT INTO bot_users_list (user_id, name, age, height, sex) 
+                    VALUES (%s, %s, %s, %s, %s);''', (msg.from_user.id, name, age, height, sex))
+                postgre_con.commit()
+                db_obj.close()
             message = bot.send_message(msg.from_user.id, f'''Привет! Приятно познакомиться, {name} 😜. Выбирай интересующую тебя тему:) И при первом использовании не забудь ввести свой текущий вес!)''')
             send_keyboard(msg)
     except Exception as e:
