@@ -38,7 +38,7 @@ db_URL = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a
 db_con = psycopg2.connect(db_URL, sslmode = "require")
 db_obj = db_con.cursor()
 db_obj.execute('''INSERT INTO bot_users_list (user_id, name, age, height, sex) VALUES (%s, %s, %s, %s, %s);''', (12345, 'Alex', 32, 1.65, 'М'))
-print('OK')
+# print('OK')
 @bot.message_handler(commands=['start'])
 
 def send_welcome(message):
