@@ -197,7 +197,7 @@ def increase_weight(msg):
                     ''')
                     cursor.close()
                     send_keyboard(msg)
-    except:
+    except Exception as e:
         bot.send_message(msg.chat.id, '''
         Кажется, мне не достает данных, проверь был ли введен вес и первичные данные, которые вводились на старте 😉
         ''')
@@ -370,7 +370,7 @@ def decrease_weight(msg):
                     ''')
                     cursor.close()
                     send_keyboard(msg)
-    except:
+   except Exception as e:
         bot.send_message(msg.chat.id, '''
         Кажется, мне не достает данных, проверь был ли введен вес и первичные данные, которые вводились на старте 😉
         ''')
@@ -386,19 +386,19 @@ def callback_worker(call):
     elif call.text == "Хочу согнать жирок 🥦":
         try:
             activity_keyboard(call, text = "Хочу согнать жирок 🥦")
-        except:
+        except Exception as e:
             bot.send_message(call.chat.id, 'Кажется, нет данных о твоем весе, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
     elif call.text == "Хочу поднабрать массы 💪":
         try:
             activity_keyboard(call, text = "Хочу поднабрать массы 💪")
-        except:
+        except Exception as e:
             bot.send_message(call.chat.id, 'Кажется, нет данных о твоем весе, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
     elif call.text == "Хочу посмотреть статистику своего веса 😈":
         try:
             weight_statistic(call)
-        except:
+        except Exception as e:
             bot.send_message(call.chat.id, 'Кажется, нет данных о твоем весе, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
     elif call.text == "Удалить последнюю запись веса":
@@ -410,13 +410,13 @@ def callback_worker(call):
     elif call.text == "Удалить все записи веса":
         try:
             delete_all(call)
-        except:
+        except Exception as e:
             bot.send_message(call.chat.id, 'Кажется, нет данных, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
     elif call.text == "Очистить данные из базы (имя, возраст, пол, рост)":
         try:
             delete_user_info(call)
-        except:
+        except Exception as e:
             bot.send_message(call.chat.id, 'Кажется, нет данных, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
 
@@ -484,13 +484,6 @@ def delete_last(msg):
         send_keyboard(msg, "Чем еще могу помочь?")
 
 def delete_all(msg):
-    # with sqlite3.connect('fit_o_bot.db') as con:
-    #     con.isolation_level = None
-    #     cursor = con.cursor()
-    #     cursor.execute(f'DELETE FROM bot_users_weights_table WHERE user_id=={msg.from_user.id}')
-    #     cursor.close()
-    #     bot.send_message(msg.chat.id, 'И начнем все с чистого листа! 🥂')
-    #     send_keyboard(msg, "Чем еще могу помочь?")
     with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
         db_obj = postgre_con.cursor()
         db_obj.execute(f'DELETE FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id}')
@@ -498,14 +491,8 @@ def delete_all(msg):
         db_obj.close()
         bot.send_message(msg.chat.id, 'И начнем все с чистого листа! 🥂')
         send_keyboard(msg, "Чем еще могу помочь?")
+
 def delete_user_info(msg):
-    # with sqlite3.connect('fit_o_bot.db') as con:
-    #     con.isolation_level = None
-    #     cursor = con.cursor()
-    #     cursor.execute(f'DELETE FROM bot_users_list WHERE user_id=={msg.from_user.id}')
-    #     cursor.close()
-    #     bot.send_message(msg.chat.id, 'Все данные удалены 🥳')
-    #     send_keyboard(msg, "Чем еще могу помочь?")
     with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
         db_obj = postgre_con.cursor()
         db_obj.execute(f'DELETE FROM bot_users_list WHERE "user_id"={msg.from_user.id}')
