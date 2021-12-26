@@ -479,9 +479,9 @@ def delete_last(msg):
         db_obj = postgre_con.cursor()
         db_obj.execute(f'''
         DELETE FROM bot_users_weights_table 
-        WHERE user_id = {msg.from_user.id} IN (
-            SELECT id FROM bot_users_weights_table
-            ORDER BY id DESC
+        WHERE "user_id" = {msg.from_user.id} IN (
+            SELECT "id" FROM bot_users_weights_table
+            ORDER BY "id" DESC
             LIMIT 1
             )
             ''')
