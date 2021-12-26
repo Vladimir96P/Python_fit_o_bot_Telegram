@@ -370,7 +370,7 @@ def decrease_weight(msg):
                     ''')
                     cursor.close()
                     send_keyboard(msg)
-   except Exception as e:
+    except Exception as e:
         bot.send_message(msg.chat.id, '''
         Кажется, мне не достает данных, проверь был ли введен вес и первичные данные, которые вводились на старте 😉
         ''')
