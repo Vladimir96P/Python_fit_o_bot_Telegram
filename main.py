@@ -434,10 +434,10 @@ def callback_worker(call):
             bot.send_message(call.chat.id, 'Кажется, нет данных, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
     elif call.text == "Не худею/не набираю 👿":
-        try:
-            variation(call)
-        except:
-            bot.send_message(call.chat.id, 'Произошла ошибка, повтори команду.')
+    # try:
+        variation(call)
+    # except:
+    #     bot.send_message(call.chat.id, 'Произошла ошибка, повтори команду.')
     elif call.text == "Очистить данные из базы (имя, возраст, пол, рост)":
         try:
             delete_user_info(call)
