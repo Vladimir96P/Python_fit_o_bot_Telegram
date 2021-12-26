@@ -477,7 +477,13 @@ def delete_last(msg):
     #     send_keyboard(msg, "Чем еще могу помочь?")
     with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
         db_obj = postgre_con.cursor()
-        db_obj.execute(f'DELETE FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} DESC LIMIT 1')
+        db_obj.execute(f'''
+        DELETE FROM bot_users_weights_table 
+        WHERE user_id = {msg.from_user.id} IN (
+            SELECT user_id FROM bot_users_weights_table
+            WHERE user_id = {msg.from_user.id}
+            ORDER BY "ID" DESC
+            LIMIT 1''')
         postgre_con.commit()
         db_obj.close()
         bot.send_message(msg.chat.id, 'Прошло успешно!')
