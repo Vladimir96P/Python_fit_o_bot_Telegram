@@ -497,7 +497,7 @@ def delete_user_info(msg):
 @bot.message_handler(commands=['help'])
 def help(message):
     msg = bot.reply_to(message, "Выбирай интересующий тебя раздел! Если я еще не знаю твой возраст и рост - вызывай команду start 😉")
-    send_keyboard(msg)
+    send_keyboard(message)
 
 @bot.message_handler(content_types=['text'])
 def sorry(message):
