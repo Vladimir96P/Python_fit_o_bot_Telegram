@@ -99,7 +99,7 @@ def increase_weight(msg):
             db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
             age = int(pretiffy(db_obj.fetchall()))
             db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            height = float(pretiffy(db_obj.fetchall()))
+            height = int(pretiffy(db_obj.fetchall()))
             postgre_con.commit()
             db_obj.close()
             backslash = "\\"
@@ -112,7 +112,7 @@ def increase_weight(msg):
                 last_weight_str = str(last_weight).replace('.', '\.')
                 water_quantity_str = str(water_quantity).replace('.', '\.')
                 bot.send_message(msg.chat.id, f'''
-                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. *Рост_ {backslash}= *{height}* м; *Возраст_ {backslash}= *{age}*; *Пол_: *{sex}*{backslash}.
+                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. *Рост_ {backslash}= *{height}* cм; *Возраст_ {backslash}= *{age}*; *Пол_: *{sex}*{backslash}.
                 \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
                 \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
                 \n★ *{fat_nutrient}* г *жиров_;
