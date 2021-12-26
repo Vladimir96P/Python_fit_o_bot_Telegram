@@ -472,12 +472,10 @@ def delete_last(msg):
         db_obj = postgre_con.cursor()
         db_obj.execute(f'''
         DELETE FROM bot_users_weights_table 
-        WHERE "user_id" = {msg.from_user.id} IN (
-            SELECT "id" FROM bot_users_weights_table
-            ORDER BY "id" DESC
-            LIMIT 1
-            )
-            ''')
+        WHERE id = (SELECT MAX(id) as max_id 
+            FROM bot_users_weights_table 
+            WHERE user_id = {msg.from_user.id})
+        ''')
         postgre_con.commit()
         db_obj.close()
         bot.send_message(msg.chat.id, 'Прошло успешно!')
