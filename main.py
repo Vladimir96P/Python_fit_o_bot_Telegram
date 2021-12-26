@@ -22,8 +22,9 @@ def send_keyboard(message, text = "Выбери интересующий раз�
     itembtn3 = types.KeyboardButton('Хочу поднабрать массы 💪')
     itembtn4 = types.KeyboardButton('Удалить последнюю запись веса')
     itembtn5 = types.KeyboardButton("Удалить все записи веса")
-    itembtn6 = types.KeyboardButton("Очистить данные из базы (имя, возраст, пол, рост)")
-    keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn6)
+    itembtn6 = types.KeyboardButton("Не худею/не набираю 👿")
+    itembtn7 = types.KeyboardButton("Очистить данные из базы (имя, возраст, пол, рост)")
+    keyboard.add(itembtn0, itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn6, itembtn7)
     msg = bot.send_message(message.from_user.id,text=text, reply_markup=keyboard)
     bot.register_next_step_handler(msg, callback_worker)
 
@@ -380,6 +381,21 @@ def decrease_weight(msg):
         ''')
         send_keyboard(msg)
 
+def variation(msg):
+    variation_calories = round(200)
+    fat_nutrient = round((0.35 * variation_calories) / 9)
+    protein_nutrient = round((0.4 * variation_calories) / 4)
+    carbs_nutrient = round((0.25 * variation_calories) / 4)
+    bot.send_message(msg.chat.id, f'''
+    Каждый из нас индивидуален, поэтому если процесс не идет или идет слишком быстро - попробуй изменить рекомендованный рацион на \+\- *200* калорий\.
+    \nПо белкам, жирам и углеводам это будет следующее количество:
+    \n★ *{fat_nutrient}* г жиров;
+    \n★ *{protein_nutrient}* г белков;
+    \n★ *{carbs_nutrient}* г углеводов{backslash}.
+    \nУспехов{backslash}! 😎
+    ''', parse_mode="MarkdownV2")
+    send_keyboard(msg)
+
 def callback_worker(call):
     if call.text == "Хочу сообщить свой текущий вес 😱":
         msg = bot.send_message(call.chat.id, f'''
@@ -417,6 +433,11 @@ def callback_worker(call):
         except Exception as e:
             bot.send_message(call.chat.id, 'Кажется, нет данных, необходимо сначала их ввести 😛')
             send_keyboard(call, "Чем еще могу помочь?")
+    elif call.text == "Не худею/не набираю 👿":
+        try:
+            variation(call)
+        except:
+            bot.send_message(call.chat.id, 'Произошла ошибка, повтори команду.')
     elif call.text == "Очистить данные из базы (имя, возраст, пол, рост)":
         try:
             delete_user_info(call)
