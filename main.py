@@ -83,129 +83,129 @@ def pretiffy(last_val):
         return last_v
 
 def increase_weight(msg):
-# try:
-    if msg.text == "Низкая активность 🐌":
+    try:
+        if msg.text == "Низкая активность 🐌":
+            bot.send_message(msg.chat.id, '''
+            Я даже боюсь представить, какая у тебя цель набора при малоактивном образе жизни 😱! Но это точно не в рамках моих компетенций 😂
+            ''')
+            send_keyboard(msg)
+        elif msg.text == "Средняя активность 🏄‍♀️🏄‍♂️":
+            with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
+                db_obj = postgre_con.cursor()
+                db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                last_weight = float(pretiffy(db_obj.fetchall()))
+                db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                sex = pretiffy(db_obj.fetchall())
+                db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                age = int(pretiffy(db_obj.fetchall()))
+                db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                height = int(pretiffy(db_obj.fetchall()))
+                postgre_con.commit()
+                db_obj.close()
+                if sex == 'М':
+                    target_calories = round(1.2 * (13.397 * last_weight + 88.362 + 4.799 * height - 5.677 * age))
+                    water_quantity = round(((target_calories/ 1000) * 1),2)
+                    fat_nutrient = round((0.35 * target_calories) / 9)
+                    protein_nutrient = round((0.25 * target_calories) / 4)
+                    carbs_nutrient = round((0.4 * target_calories) / 4)
+                    last_weight_str = str(last_weight).replace('.', '\.')
+                    water_quantity_str = str(water_quantity).replace('.', '\.')
+                    bot.send_message(msg.chat.id, f'''
+                    🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *мужской*{backslash}.
+                    \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
+                    \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
+                    \n★ *{fat_nutrient}* г жиров;
+                    \n★ *{protein_nutrient}* г белков;
+                    \n★ *{carbs_nutrient}* г углеводов{backslash}.
+                    \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
+                    \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
+                    \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
+                    \nУдачи{backslash}! Все получится ☺️
+                    ''', parse_mode="MarkdownV2")
+                    send_keyboard(msg)
+                elif sex == 'Ж':
+                    target_calories = round(1.2 * (9.247 * last_weight + 447.593 + 3.098 * height - 4.33 * age))
+                    water_quantity = round(((target_calories / 1000) * 1), 2)
+                    fat_nutrient = round((0.35 * target_calories) / 9)
+                    protein_nutrient = round((0.25 * target_calories) / 4)
+                    carbs_nutrient = round((0.4 * target_calories) / 4)
+                    last_weight_str = str(last_weight).replace('.', '\.')
+                    water_quantity_str = str(water_quantity).replace('.', '\.')
+                    bot.send_message(msg.chat.id, f'''
+                    🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *женский*{backslash}.
+                    \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
+                    \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
+                    \n★ *{fat_nutrient}* г жиров;
+                    \n★ *{protein_nutrient}* г белков;
+                    \n★ *{carbs_nutrient}* г углеводов{backslash}.
+                    \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
+                    \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
+                    \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
+                    \nУдачи{backslash}! Все получится ☺️
+                    ''', parse_mode="MarkdownV2")
+                    send_keyboard(msg)
+        elif msg.text == "Высокая активность 🏋️ 🔥 🏋️":
+            with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
+                db_obj = postgre_con.cursor()
+                db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                last_weight = float(pretiffy(db_obj.fetchall()))
+                db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                sex = pretiffy(db_obj.fetchall())
+                db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                age = int(pretiffy(db_obj.fetchall()))
+                db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
+                height = int(pretiffy(db_obj.fetchall()))
+                postgre_con.commit()
+                db_obj.close()
+                if sex == 'М':
+                    target_calories = round(1.4 * (13.397 * last_weight + 88.362 + 4.799 * height - 5.677 * age))
+                    water_quantity = round(((target_calories/ 1000) * 1),2)
+                    fat_nutrient = round((0.3 * target_calories) / 9)
+                    protein_nutrient = round((0.3 * target_calories) / 4)
+                    carbs_nutrient = round((0.4 * target_calories) / 4)
+                    last_weight_str = str(last_weight).replace('.', '\.')
+                    water_quantity_str = str(water_quantity).replace('.', '\.')
+                    bot.send_message(msg.chat.id, f'''
+                    🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *мужской*{backslash}.
+                    \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
+                    \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
+                    \n★ *{fat_nutrient}* г жиров;
+                    \n★ *{protein_nutrient}* г белков;
+                    \n★ *{carbs_nutrient}* г углеводов{backslash}.
+                    \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
+                    \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
+                    \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
+                    \nУдачи{backslash}! Все получится ☺️
+                    ''', parse_mode="MarkdownV2")
+                    cursor.close()
+                    send_keyboard(msg)
+                elif sex == 'Ж':
+                    target_calories = round(1.4 * (9.247 * last_weight + 447.593 + 3.098 * height - 4.33 * age))
+                    water_quantity = round(((target_calories / 1000) * 1), 2)
+                    fat_nutrient = round((0.3 * target_calories) / 9)
+                    protein_nutrient = round((0.3 * target_calories) / 4)
+                    carbs_nutrient = round((0.4 * target_calories) / 4)
+                    last_weight_str = str(last_weight).replace('.', '\.')
+                    water_quantity_str = str(water_quantity).replace('.', '\.')
+                    bot.send_message(msg.chat.id, f'''
+                    🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *женский*{backslash}.
+                    \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
+                    \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
+                    \n★ *{fat_nutrient}* г жиров;
+                    \n★ *{protein_nutrient}* г белков;
+                    \n★ *{carbs_nutrient}* г углеводов{backslash}.
+                    \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
+                    \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
+                    \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
+                    \nУдачи{backslash}! Все получится ☺️
+                    ''', parse_mode="MarkdownV2")
+                    cursor.close()
+                    send_keyboard(msg)
+    except Exception as e:
         bot.send_message(msg.chat.id, '''
-        Я даже боюсь представить, какая у тебя цель набора при малоактивном образе жизни 😱! Но это точно не в рамках моих компетенций 😂
+        Кажется, мне не достает данных, проверь был ли введен вес и первичные данные, которые вводились на старте 😉
         ''')
         send_keyboard(msg)
-    elif msg.text == "Средняя активность 🏄‍♀️🏄‍♂️":
-        with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
-            db_obj = postgre_con.cursor()
-            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            last_weight = float(pretiffy(db_obj.fetchall()))
-            db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            sex = pretiffy(db_obj.fetchall())
-            db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            age = int(pretiffy(db_obj.fetchall()))
-            db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            height = int(pretiffy(db_obj.fetchall()))
-            postgre_con.commit()
-            db_obj.close()
-            if sex == 'М':
-                target_calories = round(1.2 * (13.397 * last_weight + 88.362 + 4.799 * height - 5.677 * age))
-                water_quantity = round(((target_calories/ 1000) * 1),2)
-                fat_nutrient = round((0.35 * target_calories) / 9)
-                protein_nutrient = round((0.25 * target_calories) / 4)
-                carbs_nutrient = round((0.4 * target_calories) / 4)
-                last_weight_str = str(last_weight).replace('.', '\.')
-                water_quantity_str = str(water_quantity).replace('.', '\.')
-                bot.send_message(msg.chat.id, f'''
-                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *мужской*{backslash}.
-                \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
-                \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
-                \n★ *{fat_nutrient}* г жиров;
-                \n★ *{protein_nutrient}* г белков;
-                \n★ *{carbs_nutrient}* г углеводов{backslash}.
-                \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
-                \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
-                \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
-                \nУдачи{backslash}! Все получится ☺️
-                ''', parse_mode="MarkdownV2")
-                send_keyboard(msg)
-            elif sex == 'Ж':
-                target_calories = round(1.2 * (9.247 * last_weight + 447.593 + 3.098 * height - 4.33 * age))
-                water_quantity = round(((target_calories / 1000) * 1), 2)
-                fat_nutrient = round((0.35 * target_calories) / 9)
-                protein_nutrient = round((0.25 * target_calories) / 4)
-                carbs_nutrient = round((0.4 * target_calories) / 4)
-                last_weight_str = str(last_weight).replace('.', '\.')
-                water_quantity_str = str(water_quantity).replace('.', '\.')
-                bot.send_message(msg.chat.id, f'''
-                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *женский*{backslash}.
-                \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
-                \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
-                \n★ *{fat_nutrient}* г жиров;
-                \n★ *{protein_nutrient}* г белков;
-                \n★ *{carbs_nutrient}* г углеводов{backslash}.
-                \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
-                \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
-                \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
-                \nУдачи{backslash}! Все получится ☺️
-                ''', parse_mode="MarkdownV2")
-                send_keyboard(msg)
-    elif msg.text == "Высокая активность 🏋️ 🔥 🏋️":
-        with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
-            db_obj = postgre_con.cursor()
-            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            last_weight = float(pretiffy(db_obj.fetchall()))
-            db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            sex = pretiffy(db_obj.fetchall())
-            db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            age = int(pretiffy(db_obj.fetchall()))
-            db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-            height = float(pretiffy(db_obj.fetchall()))
-            postgre_con.commit()
-            db_obj.close()
-            if sex == 'М':
-                target_calories = round(1.4 * (13.397 * last_weight + 88.362 + 4.799 * height - 5.677 * age))
-                water_quantity = round(((target_calories/ 1000) * 1),2)
-                fat_nutrient = round((0.3 * target_calories) / 9)
-                protein_nutrient = round((0.3 * target_calories) / 4)
-                carbs_nutrient = round((0.4 * target_calories) / 4)
-                last_weight_str = str(last_weight).replace('.', '\.')
-                water_quantity_str = str(water_quantity).replace('.', '\.')
-                bot.send_message(msg.chat.id, f'''
-                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *мужской*{backslash}.
-                \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
-                \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
-                \n★ *{fat_nutrient}* г жиров;
-                \n★ *{protein_nutrient}* г белков;
-                \n★ *{carbs_nutrient}* г углеводов{backslash}.
-                \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
-                \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
-                \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
-                \nУдачи{backslash}! Все получится ☺️
-                ''', parse_mode="MarkdownV2")
-                cursor.close()
-                send_keyboard(msg)
-            elif sex == 'Ж':
-                target_calories = round(1.4 * (9.247 * last_weight + 447.593 + 3.098 * height - 4.33 * age))
-                water_quantity = round(((target_calories / 1000) * 1), 2)
-                fat_nutrient = round((0.3 * target_calories) / 9)
-                protein_nutrient = round((0.3 * target_calories) / 4)
-                carbs_nutrient = round((0.4 * target_calories) / 4)
-                last_weight_str = str(last_weight).replace('.', '\.')
-                water_quantity_str = str(water_quantity).replace('.', '\.')
-                bot.send_message(msg.chat.id, f'''
-                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол {backslash}= *женский*{backslash}.
-                \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
-                \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
-                \n★ *{fat_nutrient}* г жиров;
-                \n★ *{protein_nutrient}* г белков;
-                \n★ *{carbs_nutrient}* г углеводов{backslash}.
-                \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды{backslash}!
-                \nИтого твой суммарный рацион за день составит *{target_calories}* калорий{backslash}.
-                \nДля подсчета рациона тебе пригодятся соответствующие приложения и необходимо приобрести кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
-                \nУдачи{backslash}! Все получится ☺️
-                ''', parse_mode="MarkdownV2")
-                cursor.close()
-                send_keyboard(msg)
-    # except Exception as e:
-    #     bot.send_message(msg.chat.id, '''
-    #     Кажется, мне не достает данных, проверь был ли введен вес и первичные данные, которые вводились на старте 😉
-    #     ''')
-    #     send_keyboard(msg)
 
 def decrease_weight(msg):
     try:
@@ -219,7 +219,7 @@ def decrease_weight(msg):
                 db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
                 age = int(pretiffy(db_obj.fetchall()))
                 db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                height = float(pretiffy(db_obj.fetchall()))
+                height = int(pretiffy(db_obj.fetchall()))
                 postgre_con.commit()
                 db_obj.close()
                 if sex == 'М':
@@ -274,7 +274,7 @@ def decrease_weight(msg):
                 db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
                 age = int(pretiffy(db_obj.fetchall()))
                 db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                height = float(pretiffy(db_obj.fetchall()))
+                height = int(pretiffy(db_obj.fetchall()))
                 postgre_con.commit()
                 db_obj.close()
                 if sex == 'М':
@@ -329,7 +329,7 @@ def decrease_weight(msg):
                 db_obj.execute(f'SELECT age FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
                 age = int(pretiffy(db_obj.fetchall()))
                 db_obj.execute(f'SELECT height FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
-                height = float(pretiffy(db_obj.fetchall()))
+                height = int(pretiffy(db_obj.fetchall()))
                 postgre_con.commit()
                 db_obj.close()
                 if sex == 'М':
