@@ -480,9 +480,9 @@ def delete_last(msg):
         db_obj.execute(f'''
         DELETE FROM bot_users_weights_table 
         WHERE user_id = {msg.from_user.id} IN (
-            SELECT * FROM bot_users_weights_table
+            SELECT "ID", user_id FROM bot_users_weights_table
             WHERE user_id = {msg.from_user.id}
-            ORDER BY ID DESC
+            ORDER BY "ID" DESC
             LIMIT 1
             )
             ''')
