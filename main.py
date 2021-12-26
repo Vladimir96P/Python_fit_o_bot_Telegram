@@ -6,7 +6,7 @@ bot = telebot.TeleBot("5058162485:AAGSB2FehnhupFU5ViiEwRgypDMJmddcpmg")
 bot.delete_webhook()
 db_URL = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
 db_con = psycopg2.connect(db_URL, sslmode = "require")
-
+backslash = "\\"
 @bot.message_handler(commands=['start'])
 
 def send_welcome(message):
@@ -102,7 +102,6 @@ def increase_weight(msg):
             height = int(pretiffy(db_obj.fetchall()))
             postgre_con.commit()
             db_obj.close()
-            backslash = "\\"
             if sex == 'М':
                 target_calories = round(1.2 * (13.397 * last_weight + 88.362 + 4.799 * height - 5.677 * age))
                 water_quantity = round(((target_calories/ 1000) * 1),2)
@@ -112,15 +111,15 @@ def increase_weight(msg):
                 last_weight_str = str(last_weight).replace('.', '\.')
                 water_quantity_str = str(water_quantity).replace('.', '\.')
                 bot.send_message(msg.chat.id, f'''
-                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм; Возраст {backslash}= *{age}*; Пол: *{sex}*{backslash}.
+                🤔 По моим данным твой текущий и последний записанный вес составляет *{last_weight_str}* кг{backslash}. Рост {backslash}= *{height}* cм{backslash}. Возраст {backslash}= *{age}*{backslash}. Пол: *{sex}*{backslash}.
                 \nЕсли это не так {backslash}- тебе нужно обновить информацию, в соответствующих командах, иначе расчет будет некорректным 😔{backslash}.
                 \nДля достижения цели тебе следует придерживаться следующих ежесуточных пропорций в питании:
                 \n★ *{fat_nutrient}* г жиров;
                 \n★ *{protein_nutrient}* г белков;
-                \n★ *{carbs_nutrient}* г углеводов {backslash}.
+                \n★ *{carbs_nutrient}* г углеводов{backslash}.
                 \n★ А также выпивать не меньше, чем *{water_quantity_str}* л чистой воды {backslash}!
                 \nИтого твой суммарный рацион за день составит *{target_calories}* калорий {backslash}.
-                \nДля подсчета и записи рациона тебе пригодятся соответствующие приложения, а также необходимы кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎{backslash}!
+                \nДля подсчета и записи рациона тебе пригодятся соответствующие приложения, а также необходимы кухонные весы{backslash}. Подробнее про питание и тренировки узнаешь в *@fit{backslash}_o{backslash}_blog* 😎
                 \nУдачи{backslash}! Все получится ☺️
                 ''', parse_mode="MarkdownV2")
                 send_keyboard(msg)
