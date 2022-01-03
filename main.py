@@ -470,12 +470,12 @@ def get_nice(data_list):
     print(data_str)
     for val in list(data_list):
         data_str.append(f'{val[0]} = {val[1]} кг\n')
-    return ''.join(data_str)
+    return ''.join(sorted(data_str))
 
 def weight_statistic(msg):
     with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
         db_obj = postgre_con.cursor()
-        db_obj.execute(f'SELECT date, weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id}')
+        db_obj.execute(f'''SELECT to_date(date, 'DD/MM/YYYY') AS date_column, weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY date_column''')
         c = db_obj.fetchall()
         data_list = get_nice(c)
         postgre_con.commit()
