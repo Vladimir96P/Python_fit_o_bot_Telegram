@@ -2,6 +2,10 @@ import telebot
 from telebot import types
 import datetime as dt
 import psycopg2
+import pandas as pd
+from bob_telegram_tools.bot import TelegramBot
+import matplotlib.pyplot as plt
+
 bot = telebot.TeleBot("5058162485:AAGSB2FehnhupFU5ViiEwRgypDMJmddcpmg")
 bot.delete_webhook()
 db_URL = "postgres://qmvydayqnuuxxz:40dc9792c9d15977ed989756198fbbba01983157173a98d5840e92c8c71928a8@ec2-54-74-102-48.eu-west-1.compute.amazonaws.com:5432/dcanatqglrancq"
@@ -761,22 +765,36 @@ def add_weight(msg):
         bot.send_message(msg.chat.id, 'Введен некорректный формат 😟. Попробуй еще раз 😉')
         send_keyboard(msg)
 
+# def get_nice(data_list):
+#     data_str = []
+#     for val in list(data_list):
+#         data_str.append(f'{val[0]} = {val[1]} кг\n')
+#     return ''.join(sorted(data_str))
+
 def get_nice(data_list):
-    data_str = []
-    print(data_str)
+    date_column = []
+    weight_column = []
     for val in list(data_list):
-        data_str.append(f'{val[0]} = {val[1]} кг\n')
-    return ''.join(sorted(data_str))
+        date_column.append(val[0])
+        weight_column.append(val[1])
+    df = pd.DataFrame({'дата': date_column, 'вес': weight_column})
+    df = df.sort_values('дата')
+    return df
 
 def weight_statistic(msg):
     with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
         db_obj = postgre_con.cursor()
         db_obj.execute(f'''SELECT to_date(date, 'DD/MM/YYYY') AS date_column, weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY date_column''')
         c = db_obj.fetchall()
-        data_list = get_nice(c)
+        data_frame = get_nice(c)
+        data_frame.plot(x='дата', y='вес', kind='line', title='Статистика твоего веса', fontsize=10,
+                xlabel="Дата", ylabel="Вес, кг", style="ro--", )
+        bot_for_plot = TelegramBot(token="5058162485:AAGSB2FehnhupFU5ViiEwRgypDMJmddcpmg", user_id = msg.chat.id)
+        bot_for_plot.send_plot(data_frame)
+        bot_for_plot.clean_tmp_dir()
         postgre_con.commit()
         db_obj.close()
-        bot.send_message(msg.chat.id, data_list)
+        # bot.send_message(msg.chat.id, data_list)
         send_keyboard(msg, "Ох! Сначала подумал, что это пример геометрической прогрессии, а оказалось..")
 
 def delete_last(msg):
