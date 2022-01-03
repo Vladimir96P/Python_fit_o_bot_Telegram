@@ -80,7 +80,7 @@ def activity_keyboard(message, text):
     elif text == "Хочу согнать жирок 🥦":
         bot.register_next_step_handler(msg, diet_type)
 
-def diet_type(message, text):
+def diet_type(message):
     activitykeyboard = types.ReplyKeyboardMarkup(row_width=2)
     b0 = types.KeyboardButton('Низкоуглеводка 🍤🥜🥩')
     b1 = types.KeyboardButton('Классика 🍝🍗🥙')
@@ -90,11 +90,11 @@ def diet_type(message, text):
     \n◌ *Низкоуглеводка* {backslash}- даст более быстрый результат жиросжигания{backslash}. Имеет ряд противопоказаний{backslash}. Но также имеет и ряд положительных свойств 😉
     \n◌ *Классика* {backslash}- общепринятые пропорции белков, жиров и углеводов{backslash}.
     ''', reply_markup = activitykeyboard, parse_mode="MarkdownV2")
-    if text == "Низкая активность 🐌":
+    if message.text == "Низкая активность 🐌":
         bot.register_next_step_handler(msg, low_activity_decrease)
-    elif text == "Средняя активность 🏄‍♀️🏄‍♂️":
+    elif message.text == "Средняя активность 🏄‍♀️🏄‍♂️":
         bot.register_next_step_handler(msg, middle_activity_decrease)
-    elif text == "Высокая активность 🏋️ 🔥 🏋️️":
+    elif message.text == "Высокая активность 🏋️ 🔥 🏋️️":
         bot.register_next_step_handler(msg, high_activity_decrease)
 
 def low_activity_decrease(msg):
