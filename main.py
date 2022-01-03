@@ -78,7 +78,7 @@ def activity_keyboard(message, text):
     if text == "Хочу поднабрать массы 💪":
         bot.register_next_step_handler(msg, increase_weight)
     elif text == "Хочу согнать жирок 🥦":
-        bot.register_next_step_handler(msg, diet_type())
+        bot.register_next_step_handler(msg, diet_type)
 
 def diet_type(message, text):
     activitykeyboard = types.ReplyKeyboardMarkup(row_width=2)
@@ -885,11 +885,11 @@ def callback_worker(call):
         \nПервая часть = дата (например: 31-12-2021), а вторая = вес (в нашем примере: 85.4)''')
         bot.register_next_step_handler(msg, add_weight)
     elif call.text == "Хочу согнать жирок 🥦":
-        try:
-            activity_keyboard(call, text = "Хочу согнать жирок 🥦")
-        except Exception as e:
-            bot.send_message(call.chat.id, 'Кажется, нет данных о твоем весе, необходимо сначала их ввести 😛')
-            send_keyboard(call, "Чем еще могу помочь?")
+        # try:
+        activity_keyboard(call, text = "Хочу согнать жирок 🥦")
+        # except Exception as e:
+        #     bot.send_message(call.chat.id, 'Кажется, нет данных о твоем весе, необходимо сначала их ввести 😛')
+        #     send_keyboard(call, "Чем еще могу помочь?")
     elif call.text == "Хочу поднабрать массы 💪":
         try:
             activity_keyboard(call, text = "Хочу поднабрать массы 💪")
