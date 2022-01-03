@@ -213,7 +213,7 @@ def decrease_weight(msg):
     if msg.text == "Низкая активность 🐌":
         with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
             db_obj = postgre_con.cursor()
-            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY to_date(date, "DD/MM/YYYY") DESC LIMIT 1')
+            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY to_date(date, 'DD/MM/YYYY') DESC LIMIT 1')
             last_weight = float(pretiffy(db_obj.fetchall()))
             db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
             sex = pretiffy(db_obj.fetchall())
@@ -268,7 +268,7 @@ def decrease_weight(msg):
     elif msg.text == "Средняя активность 🏄‍♀️🏄‍♂️":
         with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
             db_obj = postgre_con.cursor()
-            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY to_date(date, "DD/MM/YYYY") DESC LIMIT 1')
+            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY to_date(date, 'DD/MM/YYYY') DESC LIMIT 1')
             last_weight = float(pretiffy(db_obj.fetchall()))
             db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
             sex = pretiffy(db_obj.fetchall())
@@ -323,7 +323,7 @@ def decrease_weight(msg):
     elif msg.text == "Высокая активность 🏋️ 🔥 🏋️":
         with psycopg2.connect(db_URL, sslmode="require") as postgre_con:
             db_obj = postgre_con.cursor()
-            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY to_date(date, "DD/MM/YYYY") DESC LIMIT 1')
+            db_obj.execute(f'SELECT weight FROM bot_users_weights_table WHERE "user_id"={msg.from_user.id} ORDER BY to_date(date, 'DD/MM/YYYY') DESC LIMIT 1')
             last_weight = float(pretiffy(db_obj.fetchall()))
             db_obj.execute(f'SELECT sex FROM bot_users_list WHERE "user_id"={msg.from_user.id} ORDER BY ID DESC LIMIT 1')
             sex = pretiffy(db_obj.fetchall())
